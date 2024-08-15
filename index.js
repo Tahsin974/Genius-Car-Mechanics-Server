@@ -7,7 +7,7 @@ const ObjectId = require('mongodb').ObjectId;
 const cors = require('cors');
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 // middleware
 app.use(cors())
@@ -33,6 +33,7 @@ async function run() {
     await client.connect();
     const database = client.db("carMechanicDB");
     const servicesCollection = database.collection("services");
+    const trainerCollection = database.collection("trainers");
 
     // POST API
     app.post("/services", async (req, res) => {
@@ -46,6 +47,13 @@ async function run() {
         const cursor = servicesCollection.find({});
         const services = await cursor.toArray()
         res.send(services);
+
+    })
+    // GET API 
+    app.get("/trainers", async (req,res) => {
+        const cursor = trainerCollection.find({});
+        const trainers = await cursor.toArray()
+        res.send(trainers);
 
     })
     // GET API 
